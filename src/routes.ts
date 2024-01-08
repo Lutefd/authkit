@@ -9,7 +9,12 @@ export const publicRoutes = ['/'];
  * @type {string[]}
  */
 
-export const privateRoutes = ['/settings'];
+export const authenticationRoutes = [
+	'/auth/login',
+	'/auth/register',
+	'/auth/forgot-password',
+	'/auth/reset-password',
+];
 
 /**
  * Prefixo das rotas de autenticação
