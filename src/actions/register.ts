@@ -1,7 +1,7 @@
 'use server';
 import { RegisterSchema } from '@/schemas';
 import { z } from 'zod';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { db } from '@/server/db';
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
