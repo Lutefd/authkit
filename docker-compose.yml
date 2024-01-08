@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+    authkit-db:
+        image: mysql:8.0
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+            MYSQL_DATABASE: ${DATABASE_NAME}
+            MYSQL_USER: ${DATABASE_USER}
+            MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+        volumes:
+            - authkit_data:/var/lib/mysql
+        ports:
+            - 3306:3306
+
+volumes:
+    authkit_data:
