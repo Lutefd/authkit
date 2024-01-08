@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import { useState, useTransition } from 'react';
 import CardWrapper from './CardWrapper';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,8 +17,12 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import FormError from '../FormError';
 import FormSuccess from '../FormSuccess';
+import { login } from '@/actions/login';
 
 function LoginForm() {
+	const [isPending, startTransition] = useTransition();
+	const [error, setError] = useState<string | undefined>('');
+	const [success, setSuccess] = useState<string | undefined>('');
 	const form = useForm<z.infer<typeof LoginSchema>>({
 		resolver: zodResolver(LoginSchema),
 		defaultValues: {
@@ -28,7 +32,14 @@ function LoginForm() {
 	});
 
 	const onSubmit = (data: z.infer<typeof LoginSchema>) => {
-		console.log(data);
+		startTransition(() => {
+			setError('');
+			setSuccess('');
+			login(data).then((res) => {
+				setError(res.error);
+				setSuccess(res.success);
+			});
+		});
 	};
 	return (
 		<CardWrapper
@@ -54,6 +65,7 @@ function LoginForm() {
 											{...field}
 											placeholder="exemplo@email.com"
 											type="email"
+											disabled={isPending}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -72,6 +84,7 @@ function LoginForm() {
 											placeholder="********"
 											type="password"
 											required
+											disabled={isPending}
 										/>
 									</FormControl>
 									<FormMessage />
@@ -79,9 +92,14 @@ function LoginForm() {
 							)}
 						/>
 					</div>
-					<FormError error="" />
-					<FormSuccess success="" />
-					<Button type="submit" variant="default" className="w-full">
+					<FormError error={error} />
+					<FormSuccess success={success} />
+					<Button
+						type="submit"
+						variant="default"
+						className="w-full"
+						disabled={isPending}
+					>
 						{' '}
 						Entrar{' '}
 					</Button>
