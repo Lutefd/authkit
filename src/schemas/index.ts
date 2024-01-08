@@ -21,5 +21,7 @@ export const RegisterSchema = z.object({
 		.max(44, {
 			message: 'A senha deve ter no máximo 44 caracteres',
 		}),
-	name: z.string(),
+	name: z.string().min(3, {
+		message: 'O nome deve ter no mínimo 3 caracteres',
+	}),
 });
