@@ -1,14 +1,15 @@
-import { PrismaAdapter } from '@auth/prisma-adapter';
 import NextAuth from 'next-auth';
-import { db } from './db';
+import { DrizzleAdapter } from '@auth/drizzle-adapter';
+import { authDb, dbPromise } from './db';
 import authConfig from './auth.config';
+
 export const {
 	handlers: { GET, POST },
 	auth,
 	signIn,
 	signOut,
 } = NextAuth({
-	adapter: PrismaAdapter(db),
+	adapter: DrizzleAdapter(authDb),
 	session: {
 		strategy: 'jwt',
 	},
