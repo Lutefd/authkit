@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1705329669297,
+      "tag": "0000_demonic_sebastian_shaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1705330829204,
+      "tag": "0001_mysterious_the_liberteens",
+      "breakpoints": true
+    }
+  ]
+}
