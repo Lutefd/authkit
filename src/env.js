@@ -28,6 +28,10 @@ export const env = createEnv({
 		RDS_SECRET_ARN: z.string().default(''),
 		ACCESS_KEY_ID: z.string().default(''),
 		SECRET_ACCESS_KEY: z.string().default(''),
+		GITHUB_CLIENT_ID: z.string().default(''),
+		GITHUB_CLIENT_SECRET: z.string().default(''),
+		GOOGLE_CLIENT_ID: z.string().default(''),
+		GOOGLE_CLIENT_SECRET: z.string().default(''),
 	},
 
 	/**
@@ -56,6 +60,10 @@ export const env = createEnv({
 		RDS_SECRET_ARN: process.env.RDS_SECRET_ARN,
 		ACCESS_KEY_ID: process.env.ACCESS_KEY_ID,
 		SECRET_ACCESS_KEY: process.env.SECRET_ACCESS_KEY,
+		GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+		GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+		GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
 
 		// NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 	},
