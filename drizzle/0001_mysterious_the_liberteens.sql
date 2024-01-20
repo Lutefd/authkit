@@ -1,1 +1,0 @@
-ALTER TABLE "project1_user" ADD COLUMN "password" text;

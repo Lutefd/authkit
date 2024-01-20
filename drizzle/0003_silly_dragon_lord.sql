@@ -1,1 +1,0 @@
-ALTER TABLE "project1_user" ALTER COLUMN "id" DROP DEFAULT;

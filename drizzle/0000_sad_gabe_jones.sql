@@ -1,3 +1,15 @@
+DO $$ BEGIN
+ CREATE TYPE "role_enum" AS ENUM('ADMIN', 'USER');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "user_status_enum" AS ENUM('ACTIVE', 'BLOCKED');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "project1_account" (
 	"userId" text NOT NULL,
 	"type" text NOT NULL,
@@ -14,11 +26,14 @@ CREATE TABLE IF NOT EXISTS "project1_account" (
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "project1_user" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"id" text PRIMARY KEY NOT NULL,
 	"name" text,
 	"email" text NOT NULL,
 	"emailVerified" timestamp,
-	"image" text
+	"password" text,
+	"image" text,
+	"role" "role_enum" DEFAULT 'USER' NOT NULL,
+	"status" "user_status_enum" DEFAULT 'ACTIVE' NOT NULL
 );
 --> statement-breakpoint
 DO $$ BEGIN
