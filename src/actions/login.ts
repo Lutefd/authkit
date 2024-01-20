@@ -21,6 +21,9 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 			email,
 			password,
 		});
+		return {
+			success: 'Login realizado com sucesso',
+		};
 	} catch (error) {
 		if (error instanceof AuthError) {
 			switch (error.type) {
