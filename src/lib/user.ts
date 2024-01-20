@@ -27,3 +27,21 @@ export const getUserById = async (id: string) => {
 		return null;
 	}
 };
+
+export const setDefaultRoleAndStatus = async (id: string) => {
+	const db = await dbPromise;
+
+	try {
+		const user = await db
+			.update(users)
+			.set({
+				role: 'USER',
+				status: 'ACTIVE',
+			})
+			.where(eq(users.id, id));
+
+		return user;
+	} catch (error) {
+		return null;
+	}
+};
