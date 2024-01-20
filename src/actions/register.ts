@@ -4,8 +4,7 @@ import { z } from 'zod';
 import bcrypt from 'bcryptjs';
 import { dbPromise } from '@/server/db';
 import { eq } from 'drizzle-orm';
-import { accounts, users } from '@/server/db/schema';
-import cuid2 from '@paralleldrive/cuid2';
+import { users } from '@/server/db/schema';
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
 	const db = await dbPromise;
@@ -34,7 +33,6 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 		};
 	}
 	const user = {
-		id: cuid2.createId(),
 		email: inputEmail,
 		password: hashPassword,
 		name: inputName,
