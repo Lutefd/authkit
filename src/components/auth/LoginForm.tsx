@@ -36,8 +36,8 @@ function LoginForm() {
 			setError('');
 			setSuccess('');
 			login(data).then((res) => {
-				setError(res.error);
-				setSuccess(res.success);
+				setError(res?.error);
+				setSuccess(res?.success);
 			});
 		});
 	};
