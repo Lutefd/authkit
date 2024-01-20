@@ -8,8 +8,10 @@ import {
 	primaryKey,
 	integer,
 	uuid,
+	pgEnum,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from '@auth/core/adapters';
+import cuid2 from '@paralleldrive/cuid2';
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -19,18 +21,27 @@ import type { AdapterAccount } from '@auth/core/adapters';
  */
 export const pgTable = pgTableCreator((name) => `project1_${name}`);
 
+export const RoleEnum = pgEnum('role_enum', ['ADMIN', 'USER']);
+export const UserStatusEnum = pgEnum('user_status_enum', ['ACTIVE', 'BLOCKED']);
 export const users = pgTable('user', {
-	id: uuid('id').defaultRandom().notNull().primaryKey(),
+	id: uuid('id')
+		.$default(() => cuid2.createId())
+		.notNull()
+		.primaryKey(),
 	name: text('name'),
 	email: text('email').notNull(),
 	emailVerified: timestamp('emailVerified', { mode: 'date' }),
 	password: text('password'),
 	image: text('image'),
+	role: RoleEnum('role').$default(() => 'USER'),
+	status: UserStatusEnum('status').$default(() => 'ACTIVE'),
 });
+
 export const accounts = pgTable(
 	'account',
 	{
 		userId: text('userId')
+			.$default(() => cuid2.createId())
 			.notNull()
 			.references(() => users.id, { onDelete: 'cascade' }),
 		type: text('type').$type<AdapterAccount['type']>().notNull(),
