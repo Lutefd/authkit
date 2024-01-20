@@ -19,6 +19,13 @@ export const {
 	signOut,
 } = NextAuth({
 	callbacks: {
+		async signIn({ user }) {
+			const existingUser = await getUserById(user.id);
+			if (!existingUser || existingUser.status == 'BLOCKED') {
+				return false;
+			}
+			return true;
+		},
 		async session({ session, token }) {
 			if (token.sub && session.user) {
 				session.user.id = token.sub;
