@@ -38,6 +38,51 @@ export const setDefaultRoleAndStatus = async (id: string) => {
 				role: 'USER',
 				status: 'ACTIVE',
 			})
+			.where(eq(users.id, id))
+			.returning({
+				role: users.role,
+				id: users.id,
+				name: users.name,
+				email: users.email,
+				image: users.image,
+				status: users.status,
+			});
+
+		return user;
+	} catch (error) {
+		return null;
+	}
+};
+
+export const setUserRole = async (id: string, role: 'ADMIN' | 'USER') => {
+	const db = await dbPromise;
+
+	try {
+		const user = await db
+			.update(users)
+			.set({
+				role,
+			})
+			.where(eq(users.id, id));
+
+		return user;
+	} catch (error) {
+		return null;
+	}
+};
+
+export const setUserStatus = async (
+	id: string,
+	status: 'ACTIVE' | 'BLOCKED'
+) => {
+	const db = await dbPromise;
+
+	try {
+		const user = await db
+			.update(users)
+			.set({
+				status,
+			})
 			.where(eq(users.id, id));
 
 		return user;
