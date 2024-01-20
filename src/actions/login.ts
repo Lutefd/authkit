@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 import { signIn } from '@/server/auth';
 import { AuthError } from 'next-auth';
+import { getUserByEmail } from '@/lib/user';
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
 	const validateFields = LoginSchema.safeParse(values);
@@ -24,6 +25,12 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 		if (error instanceof AuthError) {
 			switch (error.type) {
 				case 'CredentialsSignin':
+					const user = await getUserByEmail(email);
+					if (user?.status == 'BLOCKED') {
+						return {
+							error: 'Usuário bloqueado',
+						};
+					}
 					return {
 						error: 'Email ou senha incorretos',
 					};
