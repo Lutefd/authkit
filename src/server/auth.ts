@@ -3,7 +3,7 @@ import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { authDb, dbPromise } from './db';
 import authConfig from './auth.config';
 import { getUserById, setDefaultRoleAndStatus } from '@/lib/user';
-import { RoleEnum, pgTable } from './db/schema';
+import { type pgTable } from './db/schema';
 
 declare module 'next-auth' {
 	interface Session {
