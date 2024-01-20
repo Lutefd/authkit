@@ -47,7 +47,6 @@ export const {
 				if (!token.sub) return token;
 				const user = await getUserById(token.sub);
 				if (!user) return token;
-				console.log('user', user);
 				if (user.status == null || user.role == null) {
 					console.log('setDefaultRoleAndStatus');
 					const updatedUser = await setDefaultRoleAndStatus(user.id);
@@ -57,8 +56,6 @@ export const {
 				} else {
 					token.role = user.role;
 				}
-
-				console.log('jwt', token);
 			}
 			return token;
 		},
