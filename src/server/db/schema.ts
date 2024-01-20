@@ -24,7 +24,7 @@ export const pgTable = pgTableCreator((name) => `project1_${name}`);
 export const RoleEnum = pgEnum('role_enum', ['ADMIN', 'USER']);
 export const UserStatusEnum = pgEnum('user_status_enum', ['ACTIVE', 'BLOCKED']);
 export const users = pgTable('user', {
-	id: uuid('id')
+	id: text('id')
 		.$default(() => cuid2.createId())
 		.notNull()
 		.primaryKey(),
