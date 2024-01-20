@@ -2,7 +2,8 @@ import NextAuth, { type DefaultSession } from 'next-auth';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { authDb, dbPromise } from './db';
 import authConfig from './auth.config';
-import { getUserById } from '@/lib/user';
+import { getUserById, setDefaultRoleAndStatus } from '@/lib/user';
+import { RoleEnum, pgTable } from './db/schema';
 
 declare module 'next-auth' {
 	interface Session {
@@ -21,11 +22,15 @@ export const {
 	callbacks: {
 		async signIn({ user }) {
 			const existingUser = await getUserById(user.id);
-			if (!existingUser || existingUser.status == 'BLOCKED') {
+			if (existingUser?.status == null || existingUser?.role == null) {
+				await setDefaultRoleAndStatus(user.id);
+			}
+			if (existingUser?.status == 'BLOCKED') {
 				return false;
 			}
 			return true;
 		},
+
 		async session({ session, token }) {
 			if (token.sub && session.user) {
 				session.user.id = token.sub;
@@ -33,23 +38,32 @@ export const {
 			if (token.role && session.user) {
 				session.user.role = token.role as 'ADMIN' | 'USER' | null;
 			}
-			console.log('session', { session });
-			console.log('token from session', { token });
+
 			return session;
 		},
 
-		async jwt({ token }) {
-			console.log('jwt token', { token });
-			if (!token.sub) return token;
-			const user = await getUserById(token.sub);
-			if (!user) return token;
-			console.log('user from jwt', { user });
-			token.role = user.role;
+		async jwt({ token, account }) {
+			if (account && account.access_token) {
+				if (!token.sub) return token;
+				const user = await getUserById(token.sub);
+				if (!user) return token;
+				console.log('user', user);
+				if (user.status == null || user.role == null) {
+					console.log('setDefaultRoleAndStatus');
+					const updatedUser = await setDefaultRoleAndStatus(user.id);
+					if (!updatedUser) return token;
+					token.role = updatedUser[0].role;
+					console.log('token role', token.role);
+				} else {
+					token.role = user.role;
+				}
 
+				console.log('jwt', token);
+			}
 			return token;
 		},
 	},
-	adapter: DrizzleAdapter(authDb),
+	adapter: DrizzleAdapter(authDb, pgTable),
 	session: {
 		strategy: 'jwt',
 	},
