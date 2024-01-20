@@ -15,6 +15,27 @@
       "when": 1705330829204,
       "tag": "0001_mysterious_the_liberteens",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1705770267817,
+      "tag": "0002_jazzy_master_mold",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1705770752178,
+      "tag": "0003_silly_dragon_lord",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1705772165246,
+      "tag": "0004_complex_sauron",
+      "breakpoints": true
     }
   ]
 }
