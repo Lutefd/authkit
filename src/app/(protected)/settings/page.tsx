@@ -1,9 +1,11 @@
 import { Button } from '@/components/ui/button';
-import { signOut } from '@/server/auth';
+import { auth, signOut } from '@/server/auth';
 
 import React from 'react';
 
 async function SettingsPage() {
+	const session = await auth();
+
 	return (
 		<div>
 			SettingsPage
@@ -15,6 +17,7 @@ async function SettingsPage() {
 			>
 				<Button type="submit">Sair</Button>
 			</form>
+			{JSON.stringify(session)}
 		</div>
 	);
 }
