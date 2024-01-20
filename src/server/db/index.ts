@@ -31,6 +31,7 @@ async function connectToDatabase() {
 	});
 	(globalThis as any).cachedDbPromise = drizzle(client, {
 		schema: myschema,
+		logger: true,
 	});
 	return (globalThis as any).cachedDbPromise as PostgresJsDatabase<
 		typeof myschema
@@ -47,6 +48,7 @@ const authQueryClient = postgres({
 
 export const authDb = drizzle(authQueryClient, {
 	schema: myschema,
+	logger: true,
 });
 
 export const dbPromise = connectToDatabase();
