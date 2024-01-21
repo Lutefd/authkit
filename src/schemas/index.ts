@@ -8,10 +8,22 @@ export const LoginSchema = z.object({
 		message: 'A senha é obrigatória',
 	}),
 });
+
 export const ResetSchema = z.object({
 	email: z.string().email({
 		message: 'O email é obrigatório',
 	}),
+});
+
+export const ResetPasswordSchema = z.object({
+	password: z
+		.string()
+		.min(8, {
+			message: 'A senha deve ter no mínimo 8 caracteres',
+		})
+		.max(44, {
+			message: 'A senha deve ter no máximo 44 caracteres',
+		}),
 });
 
 export const RegisterSchema = z.object({
