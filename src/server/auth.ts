@@ -2,7 +2,7 @@ import NextAuth, { type DefaultSession } from 'next-auth';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
 import { authDb, dbPromise } from './db';
 import authConfig from './auth.config';
-import { getUserById, setDefaultRoleStatusAndDate } from '@/lib/user';
+import { getUserById, setDefaultValues } from '@/lib/user';
 import { pgTable } from './db/schema';
 
 declare module 'next-auth' {
@@ -25,7 +25,7 @@ export const {
 	},
 	events: {
 		async linkAccount({ user }) {
-			await setDefaultRoleStatusAndDate(user.id);
+			await setDefaultValues(user.id);
 		},
 	},
 	callbacks: {
