@@ -6,6 +6,7 @@ import { dbPromise } from '@/server/db';
 import { eq } from 'drizzle-orm';
 import { users } from '@/server/db/schema';
 import { generateVerificationToken } from '@/lib/token';
+import { sendVerificationEmail } from './email';
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
 	const db = await dbPromise;
@@ -40,6 +41,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 	};
 	await db.insert(users).values(user);
 	const verificationToken = await generateVerificationToken(inputEmail);
+	await sendVerificationEmail(inputEmail, verificationToken[0].token);
 
 	return {
 		success: 'Confirmação de cadastro enviada para o email',
