@@ -32,6 +32,9 @@ export const env = createEnv({
 		GITHUB_CLIENT_SECRET: z.string().default(''),
 		GOOGLE_CLIENT_ID: z.string().default(''),
 		GOOGLE_CLIENT_SECRET: z.string().default(''),
+		SES_SECRET_ACCESS_KEY: z.string().default(''),
+		SES_ACCESS_KEY_ID: z.string().default(''),
+		SES_EMAIL: z.string().default(''),
 	},
 
 	/**
@@ -64,6 +67,9 @@ export const env = createEnv({
 		GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
 		GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
 		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+		SES_SECRET_ACCESS_KEY: process.env.SES_SECRET_ACCESS_KEY,
+		SES_ACCESS_KEY_ID: process.env.SES_ACCESS_KEY_ID,
+		SES_EMAIL: process.env.SES_EMAIL,
 
 		// NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 	},
