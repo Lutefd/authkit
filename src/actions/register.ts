@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import { dbPromise } from '@/server/db';
 import { eq } from 'drizzle-orm';
 import { users } from '@/server/db/schema';
+import { generateVerificationToken } from '@/lib/token';
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
 	const db = await dbPromise;
@@ -38,8 +39,9 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
 		name: inputName,
 	};
 	await db.insert(users).values(user);
+	const verificationToken = await generateVerificationToken(inputEmail);
 
 	return {
-		success: 'Cadastro realizado com sucesso',
+		success: 'Confirmação de cadastro enviada para o email',
 	};
 };
