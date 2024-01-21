@@ -7,7 +7,6 @@ import {
 	text,
 	primaryKey,
 	integer,
-	uuid,
 	pgEnum,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from '@auth/core/adapters';
@@ -23,6 +22,11 @@ export const pgTable = pgTableCreator((name) => `project1_${name}`);
 
 export const RoleEnum = pgEnum('role_enum', ['ADMIN', 'USER']);
 export const UserStatusEnum = pgEnum('user_status_enum', ['ACTIVE', 'BLOCKED']);
+export const TwoFactorMethodEnum = pgEnum('two_factor_method_enum', [
+	'NONE',
+	'EMAIL',
+	'AUTHENTICATOR',
+]);
 export const users = pgTable('user', {
 	id: text('id')
 		.$default(() => cuid2.createId())
@@ -35,6 +39,10 @@ export const users = pgTable('user', {
 	image: text('image'),
 	role: RoleEnum('role').$default(() => 'USER'),
 	status: UserStatusEnum('status').$default(() => 'ACTIVE'),
+	two_factor_method: TwoFactorMethodEnum('two_factor_method').$default(
+		() => 'NONE'
+	),
+	two_factor_secret: text('two_factor_secret'),
 });
 
 export const accounts = pgTable(
