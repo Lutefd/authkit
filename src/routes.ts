@@ -2,7 +2,7 @@
  * Array de rotas que serão acessíveis sem autenticação
  * @type {string[]}
  */
-export const publicRoutes = ['/'];
+export const publicRoutes = ['/', '/auth/verify-email', '/auth/reset-password'];
 
 /**
  * Esse array de rotas será acessível apenas se o usuário estiver autenticado
