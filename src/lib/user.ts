@@ -28,7 +28,7 @@ export const getUserById = async (id: string) => {
 	}
 };
 
-export const setDefaultRoleAndStatus = async (id: string) => {
+export const setDefaultRoleStatusAndDate = async (id: string) => {
 	const db = await dbPromise;
 
 	try {
@@ -37,6 +37,7 @@ export const setDefaultRoleAndStatus = async (id: string) => {
 			.set({
 				role: 'USER',
 				status: 'ACTIVE',
+				emailVerified: new Date(),
 			})
 			.where(eq(users.id, id))
 			.returning({
