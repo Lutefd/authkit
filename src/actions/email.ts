@@ -13,8 +13,6 @@ const ses = new AWS.SES({
 	},
 });
 
-console.log(ses.config.credentials);
-
 export const sendEmail = async (to: string, subject: string, body: string) => {
 	const params = {
 		Destination: {
