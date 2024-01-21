@@ -52,3 +52,12 @@ export const sendVerificationEmail = async (to: string, token: string) => {
 
 	return await sendEmail(to, subject, body);
 };
+
+export const sendPasswordResetEmail = async (to: string, token: string) => {
+	const subject = 'Redefinir sua senha';
+	const body = `
+		<p>Por favor clique <a href="http://localhost:3000/auth/reset-password?token=${token}">aqui</a> para redefinir sua senha.</p>
+	`;
+
+	return await sendEmail(to, subject, body);
+};
