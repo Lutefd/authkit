@@ -18,6 +18,7 @@ import { Button } from '../ui/button';
 import FormError from '../FormError';
 import FormSuccess from '../FormSuccess';
 import { login } from '@/actions/login';
+import Link from 'next/link';
 
 function LoginForm() {
 	const [isPending, startTransition] = useTransition();
@@ -87,6 +88,19 @@ function LoginForm() {
 											disabled={isPending}
 										/>
 									</FormControl>
+									<Button
+										variant="link"
+										className="mt-2 mx-0 px-0"
+										size="sm"
+										asChild
+									>
+										<Link
+											href="/auth/reset"
+											className="mx-0"
+										>
+											Esqueceu a senha?
+										</Link>
+									</Button>
 									<FormMessage />
 								</FormItem>
 							)}
