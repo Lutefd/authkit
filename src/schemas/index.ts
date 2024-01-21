@@ -8,6 +8,11 @@ export const LoginSchema = z.object({
 		message: 'A senha é obrigatória',
 	}),
 });
+export const ResetSchema = z.object({
+	email: z.string().email({
+		message: 'O email é obrigatório',
+	}),
+});
 
 export const RegisterSchema = z.object({
 	email: z.string().email({
