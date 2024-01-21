@@ -5,7 +5,6 @@ import { signIn } from '@/server/auth';
 import { AuthError } from 'next-auth';
 
 export const oauthLogin = async (provider: string) => {
-	console.log('oauthLogin', provider);
 	try {
 		await signIn(provider);
 		return {
