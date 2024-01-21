@@ -20,7 +20,10 @@ export const generateVerificationToken = async (email: string) => {
 	};
 	const newVerificationToken = await db
 		.insert(verificationToken)
-		.values(newTokenData);
+		.values(newTokenData)
+		.returning({
+			token: verificationToken.token,
+		});
 	return newVerificationToken;
 };
 
