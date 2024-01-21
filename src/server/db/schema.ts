@@ -79,6 +79,15 @@ export const verificationToken = pgTable('verificationToken', {
 	expires: timestamp('expires', { mode: 'date' }).notNull(),
 });
 
+export const passwordResetToken = pgTable('passwordResetToken', {
+	id: text('id')
+		.$default(() => cuid2.createId())
+		.notNull(),
+	email: text('email').notNull(),
+	token: text('token').notNull().unique(),
+	expires: timestamp('expires', { mode: 'date' }).notNull(),
+});
+
 // export const sessions = pgTable('session', {
 // 	sessionToken: text('sessionToken').notNull().primaryKey(),
 // 	userId: text('userId')
