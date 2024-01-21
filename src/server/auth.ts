@@ -29,11 +29,15 @@ export const {
 		},
 	},
 	callbacks: {
-		async signIn({ user }) {
+		async signIn({ user, account }) {
 			const existingUser = await getUserById(user.id);
 			if (existingUser?.status == 'BLOCKED') {
 				return false;
 			}
+			if (account?.provider != 'credentials') {
+				return true;
+			}
+			if (!existingUser?.emailVerified) return false;
 			return true;
 		},
 
