@@ -7,6 +7,7 @@ export const LoginSchema = z.object({
 	password: z.string().min(1, {
 		message: 'A senha é obrigatória',
 	}),
+	code: z.optional(z.string()),
 });
 
 export const ResetSchema = z.object({
