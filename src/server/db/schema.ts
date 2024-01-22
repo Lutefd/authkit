@@ -74,7 +74,7 @@ export const verificationToken = pgTable('verificationToken', {
 	id: text('id')
 		.$default(() => cuid2.createId())
 		.notNull(),
-	email: text('email').notNull(),
+	email: text('email').notNull().unique(),
 	token: text('token').notNull().unique(),
 	expires: timestamp('expires', { mode: 'date' }).notNull(),
 });
@@ -83,10 +83,37 @@ export const passwordResetToken = pgTable('passwordResetToken', {
 	id: text('id')
 		.$default(() => cuid2.createId())
 		.notNull(),
-	email: text('email').notNull(),
+	email: text('email').notNull().unique(),
 	token: text('token').notNull().unique(),
 	expires: timestamp('expires', { mode: 'date' }).notNull(),
 });
+
+export const emailTwoFactorVerificationToken = pgTable(
+	'emailTwoFactorVerificationToken',
+	{
+		id: text('id')
+			.$default(() => cuid2.createId())
+			.notNull(),
+		email: text('email').notNull().unique(),
+		token: text('token').notNull().unique(),
+		expires: timestamp('expires', { mode: 'date' }).notNull(),
+	}
+);
+
+export const emailTwoFactorConfirmation = pgTable(
+	'emailTwoFactorConfirmation',
+	{
+		id: text('id')
+			.$default(() => cuid2.createId())
+			.notNull(),
+		userId: text('userId')
+			.notNull()
+			.references(() => users.id, {
+				onDelete: 'cascade',
+			})
+			.unique(),
+	}
+);
 
 // export const sessions = pgTable('session', {
 // 	sessionToken: text('sessionToken').notNull().primaryKey(),
