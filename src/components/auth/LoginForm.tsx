@@ -24,6 +24,7 @@ function LoginForm() {
 	const [isPending, startTransition] = useTransition();
 	const [error, setError] = useState<string | undefined>('');
 	const [success, setSuccess] = useState<string | undefined>('');
+	const [showTwoFactor, setShowTwoFactor] = useState(false);
 	const form = useForm<z.infer<typeof LoginSchema>>({
 		resolver: zodResolver(LoginSchema),
 		defaultValues: {
@@ -37,8 +38,17 @@ function LoginForm() {
 			setError('');
 			setSuccess('');
 			login(data).then((res) => {
-				setError(res?.error);
-				setSuccess(res?.success);
+				if (res.error) {
+					form.reset();
+					setError(res?.error);
+				}
+				if (res.success) {
+					form.reset();
+					setSuccess(res?.success);
+				}
+				if (res.twoFactor) {
+					setShowTwoFactor(true);
+				}
 			});
 		});
 	};
@@ -55,56 +65,82 @@ function LoginForm() {
 					className="space-y-6"
 				>
 					<div className="space-y-4">
-						<FormField
-							control={form.control}
-							name="email"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Email</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="exemplo@email.com"
-											type="email"
-											disabled={isPending}
-										/>
-									</FormControl>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
-						<FormField
-							control={form.control}
-							name="password"
-							render={({ field }) => (
-								<FormItem>
-									<FormLabel>Senha</FormLabel>
-									<FormControl>
-										<Input
-											{...field}
-											placeholder="********"
-											type="password"
-											required
-											disabled={isPending}
-										/>
-									</FormControl>
-									<Button
-										variant="link"
-										className="mt-2 mx-0 px-0"
-										size="sm"
-										asChild
-									>
-										<Link
-											href="/auth/reset"
-											className="mx-0"
-										>
-											Esqueceu a senha?
-										</Link>
-									</Button>
-									<FormMessage />
-								</FormItem>
-							)}
-						/>
+						{showTwoFactor && (
+							<FormField
+								control={form.control}
+								name="code"
+								render={({ field }) => (
+									<FormItem>
+										<FormLabel>
+											Código de autenticação
+										</FormLabel>
+										<FormControl>
+											<Input
+												{...field}
+												placeholder="000000"
+												required
+												disabled={isPending}
+											/>
+										</FormControl>
+										<FormMessage />
+									</FormItem>
+								)}
+							/>
+						)}
+						{!showTwoFactor && (
+							<>
+								<FormField
+									control={form.control}
+									name="email"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Email</FormLabel>
+											<FormControl>
+												<Input
+													{...field}
+													placeholder="exemplo@email.com"
+													type="email"
+													disabled={isPending}
+												/>
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+								<FormField
+									control={form.control}
+									name="password"
+									render={({ field }) => (
+										<FormItem>
+											<FormLabel>Senha</FormLabel>
+											<FormControl>
+												<Input
+													{...field}
+													placeholder="********"
+													type="password"
+													required
+													disabled={isPending}
+												/>
+											</FormControl>
+											<Button
+												variant="link"
+												className="mt-2 mx-0 px-0"
+												size="sm"
+												asChild
+											>
+												<Link
+													href="/auth/reset"
+													className="mx-0"
+												>
+													Esqueceu a senha?
+												</Link>
+											</Button>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
+							</>
+						)}
 					</div>
 					<FormError error={error} />
 					<FormSuccess success={success} />
@@ -114,8 +150,7 @@ function LoginForm() {
 						className="w-full"
 						disabled={isPending}
 					>
-						{' '}
-						Entrar{' '}
+						{!showTwoFactor ? 'Entrar' : 'Confirmar'}
 					</Button>
 				</form>
 			</Form>
