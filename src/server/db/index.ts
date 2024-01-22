@@ -25,24 +25,22 @@ async function connectToDatabase() {
 		return (globalThis as any).cachedDbPromise as PostgresJsDatabase<
 			typeof myschema
 		>;
-	} else {
-		console.trace('connectToDatabase was called from:');
-		console.log('connecting to db');
-		const client = postgres({
-			host: env.DB_HOST,
-			username: env.DB_USER,
-			port: 5432,
-			password: env.DB_PASSWORD,
-			database: env.DB_DATABASE,
-		});
-		(globalThis as any).cachedDbPromise = drizzle(client, {
-			schema: myschema,
-			logger: true,
-		});
-		return (globalThis as any).cachedDbPromise as PostgresJsDatabase<
-			typeof myschema
-		>;
 	}
+	console.log('connecting to db');
+	const client = postgres({
+		host: env.DB_HOST,
+		username: env.DB_USER,
+		port: 5432,
+		password: env.DB_PASSWORD,
+		database: env.DB_DATABASE,
+	});
+	(globalThis as any).cachedDbPromise = drizzle(client, {
+		schema: myschema,
+		logger: true,
+	});
+	return (globalThis as any).cachedDbPromise as PostgresJsDatabase<
+		typeof myschema
+	>;
 }
 
 const authQueryClient = new Pool({
