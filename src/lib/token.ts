@@ -1,8 +1,14 @@
 import { dbPromise } from '@/server/db';
-import { passwordResetToken, verificationToken } from '@/server/db/schema';
+import {
+	passwordResetToken,
+	emailTwoFactorVerificationToken,
+	verificationToken,
+} from '@/server/db/schema';
 import cuid2 from '@paralleldrive/cuid2';
 import { eq } from 'drizzle-orm';
 import { getPasswordResetTokenbyEmail } from './password-reset';
+import crypto from 'crypto';
+import { getEmailTwoFactorTokenByEmail } from './two-factor-authentication';
 
 export const generateVerificationToken = async (email: string) => {
 	const token = cuid2.createId();
@@ -73,4 +79,35 @@ export const generatePasswordResetToken = async (email: string) => {
 			token: passwordResetToken.token,
 		});
 	return newPasswordResetToken;
+};
+
+export const generateEmailTwoFactorToken = async (email: string) => {
+	const token = crypto.randomInt(100000, 999999).toString();
+	const expires = new Date(new Date().getTime() + 1800 * 1000);
+	const db = await dbPromise;
+	const existingToken = await getEmailTwoFactorTokenByEmail(email);
+	if (existingToken) {
+		await db
+			.delete(emailTwoFactorVerificationToken)
+			.where(eq(emailTwoFactorVerificationToken.id, existingToken.id));
+	}
+	const newTokenData = {
+		email,
+		token,
+		expires,
+	};
+	const newTwoFactorToken = await db
+		.insert(emailTwoFactorVerificationToken)
+		.values(newTokenData)
+		.returning({
+			token: emailTwoFactorVerificationToken.token,
+		});
+	return newTwoFactorToken;
+};
+
+export const deleteEmailTwoFactorToken = async (tokenId: string) => {
+	const db = await dbPromise;
+	await db
+		.delete(emailTwoFactorVerificationToken)
+		.where(eq(emailTwoFactorVerificationToken.id, tokenId));
 };
