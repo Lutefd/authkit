@@ -61,3 +61,12 @@ export const sendPasswordResetEmail = async (to: string, token: string) => {
 
 	return await sendEmail(to, subject, body);
 };
+
+export const sendTwoFactorEmail = async (to: string, token: string) => {
+	const subject = 'Código de verificação';
+	const body = `
+		<p>Seu código de verificação é: ${token}</p>
+	`;
+
+	return await sendEmail(to, subject, body);
+};
