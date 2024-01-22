@@ -1,9 +1,13 @@
 import NextAuth, { type DefaultSession } from 'next-auth';
 import { DrizzleAdapter } from '@auth/drizzle-adapter';
-import { authDb, dbPromise } from './db';
+import { authDb } from './db';
 import authConfig from './auth.config';
 import { getUserById, setDefaultValues } from '@/lib/user';
 import { pgTable } from './db/schema';
+import {
+	deleteEmailTwoFactorConfirmation,
+	getEmailTwoFactorConfirmation,
+} from '@/lib/two-factor-authentication';
 
 declare module 'next-auth' {
 	interface Session {
@@ -38,6 +42,16 @@ export const {
 				return true;
 			}
 			if (!existingUser?.emailVerified) return false;
+
+			if (existingUser.two_factor_method == 'EMAIL') {
+				const twoFactorConfirmation =
+					await getEmailTwoFactorConfirmation(existingUser.id);
+				if (!twoFactorConfirmation) {
+					return false;
+				}
+				await deleteEmailTwoFactorConfirmation(existingUser.id);
+			}
+
 			return true;
 		},
 
@@ -54,10 +68,12 @@ export const {
 
 		async jwt({ token, account }) {
 			if (!token.sub) return token;
-			const user = await getUserById(token.sub);
-			if (!user) return token;
+			if (account) {
+				const user = await getUserById(token.sub);
+				if (!user) return token;
 
-			token.role = user.role;
+				token.role = user.role;
+			}
 			return token;
 		},
 	},
@@ -65,5 +81,6 @@ export const {
 	session: {
 		strategy: 'jwt',
 	},
+	trustHost: true,
 	...authConfig,
 });
