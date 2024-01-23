@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 import { useCurrentRole } from '@/hooks/useCurrentUser';
 import { toast } from 'sonner';
 import { adminDemo } from '@/actions/admin-demo';
+import FormSuccess from './FormSuccess';
 
 function AdminView() {
 	const onApiRouteClick = () => {
@@ -34,7 +35,9 @@ function AdminView() {
 				<p className="text-2xl font-semibold text-center">Admin</p>
 			</CardHeader>
 			<CardContent className="space-y-4">
-				<RoleGate allowedRole="ADMIN">a</RoleGate>
+				<RoleGate allowedRole="ADMIN">
+					<FormSuccess success="Você pode visualizar esse conteúdo" />
+				</RoleGate>
 				<div className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-md">
 					<p className="text-sm font-medium">
 						Rota de API disponível apenas para administradores
