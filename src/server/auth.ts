@@ -14,6 +14,7 @@ declare module 'next-auth' {
 		user: {
 			role: string | null;
 			twoFactorMethod: string | null;
+			isOauth: boolean;
 		} & DefaultSession['user'];
 	}
 }
@@ -23,6 +24,7 @@ export const {
 	auth,
 	signIn,
 	signOut,
+	update,
 } = NextAuth({
 	pages: {
 		signIn: '/auth/login',
@@ -59,6 +61,13 @@ export const {
 		async session({ session, token }) {
 			if (token.sub && session.user) {
 				session.user.id = token.sub;
+				session.user.name = token.name;
+				session.user.email = token.email;
+				session.user.image = token.image as unknown as
+					| string
+					| null
+					| undefined;
+				session.user.isOauth = token.isOauth as unknown as boolean;
 			}
 			if (token.role && session.user) {
 				session.user.role = token.role as 'ADMIN' | 'USER' | null;
@@ -77,11 +86,20 @@ export const {
 		async jwt({ token, account }) {
 			if (!token.sub) return token;
 			if (account) {
-				const user = await getUserById(token.sub);
-				if (!user) return token;
-				token.twoFactorMethod = user.two_factor_method;
-				token.role = user.role;
 			}
+			const user = await getUserById(token.sub);
+			if (!user) return token;
+			if (account?.provider != 'credentials' || !account) {
+				token.isOauth = false;
+			} else {
+				token.isOauth = true;
+			}
+			token.twoFactorMethod = user.two_factor_method;
+			token.role = user.role;
+			token.name = user.name;
+			token.email = user.email;
+			token.image = user.image;
+
 			return token;
 		},
 	},
