@@ -12,8 +12,12 @@ import { FaUser } from 'react-icons/fa';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import LogoutBtn from './LogoutBtn';
 import { LogOut } from 'lucide-react';
+import { logout } from '@/actions/logout';
 function UserBtn() {
 	const user = useCurrentUser();
+	const onClick = () => {
+		logout();
+	};
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger>
@@ -25,7 +29,7 @@ function UserBtn() {
 				</Avatar>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent className="w-40" align="end">
-				<DropdownMenuItem>
+				<DropdownMenuItem onClick={onClick}>
 					<LogOut className="w-4 h-4 mr-2" />
 					<LogoutBtn>Sair</LogoutBtn>
 				</DropdownMenuItem>
