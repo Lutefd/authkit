@@ -6,6 +6,7 @@ import { Badge } from './ui/badge';
 type ExtendedUser = DefaultSession['user'] & {
 	role: 'ADMIN' | 'USER' | null | string;
 	twoFactorMethod: 'NONE' | 'EMAIL' | 'AUTHENTICATOR' | null | string;
+	isOauth: boolean;
 };
 
 interface UserInfoProps {
