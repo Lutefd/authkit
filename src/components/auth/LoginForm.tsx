@@ -41,6 +41,7 @@ function LoginForm() {
 				if (res.error) {
 					form.reset();
 					setError(res?.error);
+					setShowTwoFactor(false);
 				}
 				if (res.success) {
 					form.reset();
