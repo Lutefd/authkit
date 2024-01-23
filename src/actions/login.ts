@@ -17,6 +17,7 @@ import {
 	getEmailTwoFactorConfirmation,
 	getEmailTwoFactorTokenByEmail,
 } from '@/lib/two-factor-authentication';
+import { verifyTOTP } from './totp';
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
 	const validateFields = LoginSchema.safeParse(values);
@@ -87,6 +88,20 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
 		}
 	}
 
+	if (user.two_factor_method == 'AUTHENTICATOR') {
+		if (code) {
+			const result = await verifyTOTP(code, user.id);
+			if (result.error) {
+				return {
+					error: result.error,
+				};
+			}
+		} else {
+			return {
+				twoFactor: true,
+			};
+		}
+	}
 	try {
 		await signIn('credentials', {
 			email,
