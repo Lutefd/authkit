@@ -13,6 +13,7 @@ declare module 'next-auth' {
 	interface Session {
 		user: {
 			role: string | null;
+			twoFactorMethod: string | null;
 		} & DefaultSession['user'];
 	}
 }
@@ -62,6 +63,13 @@ export const {
 			if (token.role && session.user) {
 				session.user.role = token.role as 'ADMIN' | 'USER' | null;
 			}
+			if (token.twoFactorMethod && session.user) {
+				session.user.twoFactorMethod = token.twoFactorMethod as
+					| 'NONE'
+					| 'EMAIL'
+					| 'AUTHENTICATOR'
+					| null;
+			}
 
 			return session;
 		},
@@ -71,7 +79,7 @@ export const {
 			if (account) {
 				const user = await getUserById(token.sub);
 				if (!user) return token;
-
+				token.twoFactorMethod = user.two_factor_method;
 				token.role = user.role;
 			}
 			return token;
