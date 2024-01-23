@@ -1,3 +1,4 @@
+import { auth } from '@/server/auth';
 import { dbPromise } from '@/server/db';
 import { users } from '@/server/db/schema';
 import { eq } from 'drizzle-orm';
@@ -93,4 +94,9 @@ export const setUserStatus = async (
 	} catch (error) {
 		return null;
 	}
+};
+
+export const currentUserServer = async () => {
+	const session = await auth();
+	return session?.user;
 };
