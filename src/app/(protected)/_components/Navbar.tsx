@@ -16,7 +16,7 @@ import UserBtn from '@/components/auth/UserBtn';
 function Navbar() {
 	const pathname = usePathname();
 	return (
-		<div className="bg-white flex justify-between items-center p-4 rounded-xl w-full shadow-sm">
+		<div className="bg-white flex justify-between items-center p-4 rounded-xl max-w-[600px] w-[600px] shadow-sm">
 			<NavigationMenu>
 				<NavigationMenuList>
 					<NavigationMenuItem>
@@ -25,7 +25,7 @@ function Navbar() {
 							className={navigationMenuTriggerStyle()}
 							href="/server"
 						>
-							Server
+							Servidor
 						</Link>
 					</NavigationMenuItem>
 					<NavigationMenuItem>
@@ -34,7 +34,7 @@ function Navbar() {
 							className={navigationMenuTriggerStyle()}
 							href="/client"
 						>
-							Client
+							Cliente
 						</Link>
 					</NavigationMenuItem>
 					<NavigationMenuItem>
@@ -52,7 +52,7 @@ function Navbar() {
 							className={navigationMenuTriggerStyle()}
 							href="/settings"
 						>
-							Settings
+							Configurações
 						</Link>
 					</NavigationMenuItem>
 				</NavigationMenuList>
