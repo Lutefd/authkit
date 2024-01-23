@@ -53,6 +53,8 @@ function SettingsPage() {
 					}
 					if (res.success) {
 						setSuccess(res.success);
+						router.refresh();
+						update();
 					}
 					if (res.twoFactor) {
 						setMessage(res.message);
