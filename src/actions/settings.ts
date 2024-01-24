@@ -70,9 +70,9 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
 				twoFactorSecret
 			);
 			if (
-				values.email ||
-				values.name ||
-				values.role ||
+				values.email !== user.email ||
+				values.name !== user.name ||
+				values.role !== user.role ||
 				values.password ||
 				values.newPassword
 			) {
