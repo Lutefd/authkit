@@ -126,9 +126,23 @@ function SettingsPage() {
 										setTwoFactor(e.target.value)
 									}
 								/>
-								<Button type="button" onClick={onValidate}>
-									Validar
-								</Button>
+								<div className="flex gap-x-6 items-center">
+									<Button type="button" onClick={onValidate}>
+										Validar
+									</Button>
+									<Button
+										type="button"
+										variant={'link'}
+										onClick={() => {
+											form.resetField(
+												'two_factor_method'
+											);
+											setShowTwoFactor(false);
+										}}
+									>
+										Voltar
+									</Button>
+								</div>
 							</div>
 						)}
 						{!showTwoFactor && (
