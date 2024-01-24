@@ -86,14 +86,14 @@ export const {
 		async jwt({ token, account }) {
 			if (!token.sub) return token;
 			if (account) {
+				if (account?.provider != 'credentials' || !account) {
+					token.isOauth = false;
+				} else {
+					token.isOauth = true;
+				}
 			}
 			const user = await getUserById(token.sub);
 			if (!user) return token;
-			if (account?.provider != 'credentials' || !account) {
-				token.isOauth = false;
-			} else {
-				token.isOauth = true;
-			}
 			token.twoFactorMethod = user.two_factor_method;
 			token.role = user.role;
 			token.name = user.name;
